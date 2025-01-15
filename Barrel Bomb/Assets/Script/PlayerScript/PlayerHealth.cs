@@ -1,12 +1,13 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth;
     private int currentHealth;
     public Image[] healthIcons; // hpのImage配列
+    public string gameoverSceneName = "GameOver";
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        SceneManager.LoadScene(gameoverSceneName);
         Destroy(gameObject);
     }
 }

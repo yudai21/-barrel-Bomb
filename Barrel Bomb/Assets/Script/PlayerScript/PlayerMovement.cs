@@ -1,25 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f; // プレイヤーの移動速度
     public Transform cameraTransform; // カメラのTransform(FPS視点カメラ)
-    private Rigidbody rb;        // Rigidbodyへの参照
+    private Rigidbody rb; // Rigidbodyへの参照
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        // RigidbodyのCollision Detectionを設定
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         // WASDキーの入力を取得
-        float moveHorizontal = Input.GetAxis("Horizontal"); // A/Dキー or 左/右矢印 
-        float moveVertical = Input.GetAxis("Vertical");     // W/Sキー or 上/下矢印
+        float moveHorizontal = Input.GetAxis("Horizontal"); // A/Dキー or 左/右矢印
+        float moveVertical = Input.GetAxis("Vertical"); // W/Sキー or 上/下矢印
 
         // 移動ベクトルを計算
         Vector3 forward = cameraTransform.forward;
@@ -29,14 +30,18 @@ public class PlayerMovement : MonoBehaviour
         forward.y = 0f;
         right.y = 0f;
 
-        //  ベクトルを正規化して長さを1にする
+        // ベクトルを正規化して長さを1にする
         forward.Normalize();
         right.Normalize();
 
         // プレイヤーの移動ベクトル計算
         Vector3 movement = (forward * moveVertical + right * moveHorizontal) * moveSpeed * Time.deltaTime;
 
-        // Rigidbodyを使って移動させる
-        rb.MovePosition(rb.position + movement);
+        // Raycastで移動先を確認
+        if (!Physics.Raycast(transform.position, movement.normalized, movement.magnitude))
+        {
+            // Rigidbodyを使って移動させる
+            rb.MovePosition(rb.position + movement);
+        }
     }
 }
