@@ -3,7 +3,7 @@ using UnityEngine.UI; // Sliderの使用
 
 public class EnemyHealth : MonoBehaviour
 {
-    public int maxHealth = 100; // 最大HP
+    public int maxHealth = 50; // 最大HP
     private int currentHealth; // 現在のHP
 
     public GameObject hpBarPrefab; // HPバーのプレハブ
